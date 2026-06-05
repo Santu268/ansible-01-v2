@@ -1,0 +1,23 @@
+- name: enable redis specific version
+  ansible.builtin.dnf:
+    name: "@redis:7"
+    state: present
+- name: install  redis on specific version
+  ansible.builtin.dnf:
+    name: redis
+    state: present
+- name:  replace test in config file
+  ansible.builtin.replace:
+    path: /etc/redis/redis.conf
+    regexp: "127.0.0.1"
+    replace: "0.0.0.0"
+- name: Replace the entire SELinux line
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: 'protected-mode'
+    line: 'protected-mode no'
+- name : start the redis services
+  ansible.builtin.service:
+    name: redis
+    state: retstarted
+    enabled: true

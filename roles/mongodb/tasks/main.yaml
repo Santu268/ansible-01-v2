@@ -1,0 +1,22 @@
+- name: copy mongo repo to yum list
+  ansible.builtin.copy:
+    src: "{{ mongorepo }}"
+    dest: /etc/yum.repos.d/"{{ mongorepo }}"
+- name: install mongo server
+  ansible.builtin.package:
+    name: mongodb-org
+    state: present
+- name: start mongo services
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: true
+- name:  replace test in config file
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: "127.0.0.1"
+    replace: "0.0.0.0"
+- name: start mongo services
+  ansible.builtin.service:
+    name: mongod
+    state: restarted

@@ -1,0 +1,93 @@
+- name: roboshop instances management
+  hosts: local
+  connection: local
+  vars:
+    ami_id: ami-0220d79f3f480ecf5
+    domain_id: santoshshell.online
+    type: t3.small
+    instances: ["mongodb", "redis", "frontend"]
+    activity: create
+  tasks:
+    - name: create ec2 instance
+      amazon.aws.ec2_instance:
+        name: "roboshop-{{ item }}"
+        instance_type: "{{ type }}"
+        image_id: "{{ ami_id }}"
+        security_groups:
+          - roboshop-common
+          - "roboshop-{{ item }}"
+      loop: "{{ instances }}"
+      register: ec2_output
+      when: activity == "create"
+
+    - name: create route 53 entries as well and overwrite
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_id }}"
+        record: "{{ item.item }}.{{ domain_id }}"
+        type: A
+        ttl: 1
+        value: "{{ item.instance[0].private_ip_address }}"
+        overwrite: true
+        wait: false
+      loop: "{{ ec2_output.results }}"
+      when:
+        - activity == "create"
+
+    - name: create route 53 entries for frontend
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_id }}"
+        record: "{{ item }}.{{ domain_id }}"
+        type: A
+        ttl: 1
+        value: "{{ec2_output.results.instance[0].public_ip_address}}"
+        overwrite: true
+        wait: false
+      loop: "{{ instances }}"
+      when:
+        - activity == "create"
+        - item == "frontend"
+
+    - name: debug the message
+      debug:
+        msg: "{{ item }} ec2 instance created"
+      loop: "{{ instances }}"
+      when: activity == "create"
+
+    - name: delete r53 records
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ domain_name }}"
+        record: "{{ item }}.{{ domain_name }}" # mongodb.daws90s.shop
+        ttl: 1
+        type: A
+      loop: "{{ instances  }}"  
+      when: action == "delete"
+
+    - name: delete r53 records for frontend
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ domain_name }}"
+        record: "{{ item }}.{{ domain_name }}" # mongodb.daws90s.shop
+        ttl: 1
+        type: A
+      loop: "{{ instances  }}"  
+      when: 
+        - action == "delete"
+        - item == "frontend"
+
+    - name: destroy ec2 instance
+      amazon.aws.ec2_instance:
+        name: "roboshop-{{ item }}"
+        state: absent
+        image_id: "{{ ami_id }}"
+        wait: false
+      loop: "{{ instances }}"
+      when: activity == "destroy"
+
+    - name: debug the message
+      debug:
+        msg: "{{ item }} ec2 instance created"
+      loop: "{{ instances }}"
+      when: activity == "create"
