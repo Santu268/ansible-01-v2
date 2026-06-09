@@ -1,0 +1,12 @@
+- name: Enable the specific Node.js 20 stream
+  ansible.builtin.dnf:
+    name: "@nodejs:20"
+    state: present 
+- name:  startNode.js 20 stream
+  ansible.builtin.dnf:
+    name: nodejs
+    state: present
+- name: Install npm dependencies from package.json
+  community.general.npm:
+    path: /app
+    state: present

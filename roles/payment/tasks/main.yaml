@@ -1,50 +1,19 @@
-- name: install multiple python packages
-  ansible.builtin.dnf:
-    name: {{ item }}
-    state: present
-  loop:
-    - python
-    - gcc
-    - python-devel    
-- name: roboshop user add
-  ansible.builtin.user:
-    name: "{{ app_user }}"
-    system: true
-    home: /app
-    comment: "roboshop system user"
-    shell: /sbin/nologin
-- name: remove app directory
-  ansible.builtin.file:
-    path: /app
-    state: present
-- name: remove /tmp/payment.zip path
-  ansible.builtin.file:
-    path: /tmp/payment.zip
-    state: present
-- name: Create a new directory with specific permissions
-  ansible.builtin.file:
-    path: /app
-    state: directory
-- name: down the payment code
-  ansible.builtin.get_url:
-    url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
-    dest: /tmp/payment.zip
-- name: Copy and extract local zip file to the remote server
-  ansible.builtin.unarchive:
-    src: /tmp/payment.zip
-    dest: /app
-    remote_src: yes
-- name: install pip with requiremens
-  ansible.builtin.pip:
-    requirements: /app/requirements.txt
-    executable: pip3.9
-- name: copy payment service
-  template:
-    src: payment.service.j2
-    dest: /etc/systemd/system/payment.service
-- name: load the daemon services
-  ansible.builtin.systemd_service:
-    name: payment 
-    daemon_reload: true
-    state: restarted
-    enabled: true
+- name: app_setup
+  import_role:
+    name: common
+    tasks_from: app_setup
+
+- name: python and dependecy installation
+  import_role:
+    name: common
+    tasks_from: python
+
+- name: service copy and daemon reload
+  import_role:
+    name: common
+    tasks_from: systemd_setup
+  
+- name: service restart
+  import_role:
+    name: common
+    tasks_from: restart

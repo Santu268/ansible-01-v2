@@ -1,0 +1,15 @@
+- name: install java and maven
+  ansible.builtin.dnf:
+    name: maven
+    state: present
+
+- name: Build Java application using Maven
+  ansible.builtin.command:
+    cmd: mvn clean package
+    chdir: /app
+  register: maven_output
+  
+- name: Rename compiled Maven package to production file name
+  ansible.builtin.command:
+    cmd: mv target/shipping-1.0.jar shipping.jar
+    chdir: /var/www/my-app-source/

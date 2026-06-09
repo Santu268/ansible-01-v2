@@ -2,4 +2,4 @@
   hosts: "{{ component }}"
   become: true
   roles:
-    - role: {{ component }}
+    - role: "{{ component }}"

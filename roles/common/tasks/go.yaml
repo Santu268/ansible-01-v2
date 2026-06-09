@@ -1,0 +1,22 @@
+- name: install go land
+  ansible.builtin.package:
+    name: golang 
+    state: present
+- name: Initialize go module
+  ansible.builtin.command:
+    cmd: go mod init dispatch
+    chdir: "{{ app_dir }}"
+    creates: "{{ app_dir }}/go.mod"
+
+- name: Download Go dependencies
+  ansible.builtin.command:
+    cmd: go get
+    chdir: "{{ app_dir }}"
+  # Optional: Only run if go.sum does not exist yet
+  args:
+    creates: "{{ app_dir }}/go.sum"
+- name: Build Go binary
+  ansible.builtin.command:
+    cmd: go build
+    chdir: "{{ app_dir }}"
+    creates: "{{ app_dir }}/dispatch"

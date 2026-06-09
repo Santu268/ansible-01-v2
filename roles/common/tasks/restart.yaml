@@ -1,0 +1,5 @@
+- name: system reload
+  systemd_service:
+    name: "{{ component }}"
+    state: restarted
+    enabled: true

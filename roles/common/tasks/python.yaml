@@ -1,0 +1,12 @@
+- name: install multiple python packages
+  ansible.builtin.dnf:
+    name: {{ item }}
+    state: present
+  loop:
+    - python
+    - gcc
+    - python-devel 
+- name: install pip with requiremens
+  ansible.builtin.pip:
+    requirements: /app/requirements.txt
+    executable: pip3.9

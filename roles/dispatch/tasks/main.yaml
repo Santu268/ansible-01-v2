@@ -1,64 +1,19 @@
-- name: install go land
-  ansible.builtin.package:
-    name: golang 
-    state: present
-- name: create user for application
-  ansible.builtin.user:
-    name: roboshop
-    shell: /sbin/nologin
-    home: /app
-    system: true
-    comment: "roboshop system user"
-- name: remove app directory
-  ansible.builtin.file:
-    path: /app
-    state: absent
-- name: remove /tmp/dispatch.zip path
-  ansible.builtin.file:
-    path: /tmp/dispatch.zip
-    state: absent
-- name: Create a new directory with specific permissions
-  ansible.builtin.file:
-    path: /app
-    state: directory
-# - name: Create a new directory with specific permissions
-#   ansible.builtin.file:
-#     path: /tmp/dispatch.zip
-#     state: directory
-- name: down the catalogue code
-  ansible.builtin.get_url:
-    url: https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip
-    dest: /tmp/dispatch.zip
-- name: Copy and extract local zip file to the remote server
-  ansible.builtin.unarchive:
-    src: /tmp/dispatch.zip
-    dest: /app
-    remote_src: yes
-- name: Initialize go module
-  ansible.builtin.command:
-    cmd: go mod init dispatch
-    chdir: "{{ app_dir }}"
-    creates: "{{ app_dir }}/go.mod"
+- name: app_setup
+  import_role:
+    name: common
+    tasks_from: app_setup
 
-- name: Download Go dependencies
-  ansible.builtin.command:
-    cmd: go get
-    chdir: "{{ app_dir }}"
-  # Optional: Only run if go.sum does not exist yet
-  args:
-    creates: "{{ app_dir }}/go.sum"
-- name: Build Go binary
-  ansible.builtin.command:
-    cmd: go build
-    chdir: "{{ app_dir }}"
-    creates: "{{ app_dir }}/dispatch"
-- name: copy dispatch service
-  ansible.builtin.template:
-    src: dispatch.service.j2
-    dest: /etc/systemd/system/dispatch.service
-- name: relead service and startNode
-  ansible.builtin.systemd_service:
-    name: dispatch
-    daemon_reload: true
-    state: restarted 
-    enabled: true
+- name: go install
+  import_role:
+    name: common
+    tasks_from: go
+
+- name: service and daemon reload
+  import_role:
+    name: common
+    tasks_from: systemd_service
+
+- name: restart
+  import_role:
+    name: common
+    tasks_from: restart
