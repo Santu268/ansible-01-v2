@@ -8,7 +8,7 @@
     state: started
     enabled: true
 - name: set mysql password
-  command: mysql_secure_installation --set-root-pass RoboShop@1
+  command: mysql_secure_installation --set-root-pass "{{ mysql_root_pass }}"
   register: result
   failed_when: "result.rc != 0 and 'already secured' not in result.stderr"
   changed_when: result.rc == 0
