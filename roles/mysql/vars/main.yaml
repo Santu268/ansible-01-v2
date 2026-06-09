@@ -1,2 +1,2 @@
 # mysql_root_pass: RoboShop@1
-mysql_root_p: "{{ lookup('amazon.aws.aws_secret', 'dev/roboshop/mysqlpass', region='us-east-1') | from_json}}"
+mysql_root_p: "{{ lookup('amazon.aws.aws_secret', 'dev/roboshop/mysqlpass', region='us-east-1')}}"
