@@ -1,5 +1,5 @@
 - name: Lookup secretsmanager secret in the current region
-  ansible.builtin.debug: msg="{{ lookup('amazon.aws.aws_secret', 'dev/roboshop/mysqlpass', region=us-east-1) }}"
+  ansible.builtin.debug: msg="{{ lookup('amazon.aws.aws_secret', 'dev/roboshop/mysqlpass', region='us-east-1') }}"
 
 - name: install mysql server
   ansible.builtin.dnf:
