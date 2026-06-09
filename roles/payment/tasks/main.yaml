@@ -8,26 +8,22 @@
     - python-devel    
 - name: roboshop user add
   ansible.builtin.user:
-    name: roboshop
+    name: "{{ app_user }}"
     system: true
     home: /app
     comment: "roboshop system user"
     shell: /sbin/nologin
 - name: remove app directory
   ansible.builtin.file:
-    src: /app
+    path: /app
     state: present
 - name: remove /tmp/payment.zip path
   ansible.builtin.file:
-    src: /tmp/payment.zip
+    path: /tmp/payment.zip
     state: present
 - name: Create a new directory with specific permissions
   ansible.builtin.file:
     path: /app
-    state: directory
-- name: Create a new directory with specific permissions
-  ansible.builtin.file:
-    path: /tmp/payment.zip
     state: directory
 - name: down the payment code
   ansible.builtin.get_url:
@@ -44,7 +40,7 @@
     executable: pip3.9
 - name: copy payment service
   template:
-    src: user.payment.j2
+    src: payment.service.j2
     dest: /etc/systemd/system/payment.service
 - name: load the daemon services
   ansible.builtin.systemd_service:

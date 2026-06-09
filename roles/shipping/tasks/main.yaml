@@ -11,19 +11,15 @@
     shell: /sbin/nologin
 - name: remove app directory
   ansible.builtin.file:
-    src: /app
+    path: /app
     state: present
 - name: remove /tmp/shipping.zip path
   ansible.builtin.file:
-    src: /tmp/shipping.zip
+    path: /tmp/shipping.zip
     state: present
 - name: Create a new directory with specific permissions
   ansible.builtin.file:
     path: /app
-    state: directory
-- name: Create a new directory with specific permissions
-  ansible.builtin.file:
-    path: /tmp/shipping.zip
     state: directory
 - name: down the shipping code
   ansible.builtin.get_url:

@@ -6,7 +6,7 @@
     state: present
 - name: create system user
   user:
-    name: roboshop
+    name: "{{ app_user }}"
     system: true
     home: /app
     shell: /sbin/nologin

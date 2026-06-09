@@ -14,11 +14,11 @@
     enabled: true
 - name: remove folder of html
   ansible.builtin.file:
-    src: /usr/share/nginx/html/
+    path: /usr/share/nginx/html/
     state: absent
 - name: remove folder of html
   ansible.builtin.file:
-    src: /tmp/frontend.zip
+    path: /tmp/frontend.zip
     state: absent
 - name: download the code
   ansible.builtin.get_url:
@@ -27,11 +27,11 @@
 - name: Copy and extract local zip file to the remote server
   ansible.builtin.unarchive:
     src: /tmp/frontend.zip
-    dest: /usr/share/nginx/htm
+    dest: /usr/share/nginx/html
     remote_src: yes 
 - name: remove ngnix config file
   ansible.builtin.file:
-    src: /etc/nginx/nginx.conf
+    path: /etc/nginx/nginx.conf
     state: absent
 - name: copy nginx conf
   ansible.builtin.template:

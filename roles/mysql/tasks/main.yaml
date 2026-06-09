@@ -15,4 +15,3 @@
 - name: pring result
   ansible.builtin.debug:
     var: result
-
