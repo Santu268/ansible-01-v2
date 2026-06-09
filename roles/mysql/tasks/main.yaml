@@ -11,7 +11,7 @@
     state: started
     enabled: true
 - name: set mysql password
-  command: mysql_secure_installation --set-root-pass "{{ mysql_root_p }}"
+  command: mysql_secure_installation --set-root-pass "{{ mysql_root_p.mysql_root_password }}"
   register: result
   failed_when: "result.rc != 0 and 'already secured' not in result.stderr"
   changed_when: result.rc == 0
