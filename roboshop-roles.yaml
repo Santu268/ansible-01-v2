@@ -1,5 +1,6 @@
 - name: configure "{{ component }}" for roboshop applicaton
   hosts: "{{ component }}"
+  connection: local
   become: true
   roles:
     - role: "{{ component }}"
