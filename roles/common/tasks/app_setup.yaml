@@ -23,6 +23,6 @@
     dest: "/tmp/{{ component }}.zip"
 - name: Copy and extract local zip file to the remote server
   ansible.builtin.unarchive:
-    src: /tmp/"{{ component }}".zip
+    src: "/tmp/{{ component }}.zip"
     dest: /app
     remote_src: yes
