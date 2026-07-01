@@ -19,7 +19,7 @@
     state: directory
 - name: download the "{{ component }}" code
   ansible.builtin.get_url:
-    url: https://roboshop-artifacts.s3.amazonaws.com/"{{ component }}"-{{ app_version }}.zip
+    url: https://roboshop-artifacts.s3.amazonaws.com/"{{ component }}"-"{{ app_version }}".zip
     dest: /tmp/"{{ component }}".zip
 - name: Copy and extract local zip file to the remote server
   ansible.builtin.unarchive:
