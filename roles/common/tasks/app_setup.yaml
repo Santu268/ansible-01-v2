@@ -8,11 +8,11 @@
 - name: remove app directory
   ansible.builtin.file:
     path: /app
-    state: present
+    state: absent
 - name: remove /tmp "{{ component }}".zip path
   ansible.builtin.file:
     path: /tmp/"{{ component }}".zip
-    state: present
+    state: absent
 - name: Create a new directory with specific permissions
   ansible.builtin.file:
     path: /app
