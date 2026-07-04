@@ -1,7 +1,6 @@
 - name: Enable Nginx 1.24 module stream
-  ansible.builtin.dnf_module:
-    name: nginx
-    module_version: "1.24"
+  ansible.builtin.dnf:
+    name: nginx:1.24
     state: enabled
 - name: install nginx server
   ansible.builtin.dnf:
