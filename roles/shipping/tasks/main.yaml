@@ -10,7 +10,7 @@
 - name: service file copy and daemon reload
   import_role:
     name: comman
-    tasks_from: systemd_service
+    tasks_from: systemd_setup
 
 - name: install mysql client library
   ansible.builtin.package:

@@ -9,7 +9,7 @@
 - name: service and daemon 
   import_role:
     name: common
-    tasks_from: systemd_service
+    tasks_from: systemd_setup
 - name: service re start
   import_role:
     name: common
