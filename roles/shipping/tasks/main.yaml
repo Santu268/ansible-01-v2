@@ -22,7 +22,7 @@
     type: collection
     state: present
 - name: Import the dump file into the MySQL database
-  ansible.mysql.mysql_db:
+  community.mysql.mysql_db:
     name: all
     state: import
     target: "{{ item }}"
