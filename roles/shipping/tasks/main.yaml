@@ -9,7 +9,7 @@
     tasks_from: java
 - name: service file copy and daemon reload
   import_role:
-    name: comman
+    name: common
     tasks_from: systemd_setup
 
 - name: install mysql client library
