@@ -16,11 +16,10 @@
   ansible.builtin.package:
     name: mysql
     state: present
-- name: Download and install ansible.mysql from Galaxy
-  community.general.ansible_galaxy_install:
-    name: ansible.mysql
-    type: collection
-    state: present
+- name: install python dependencies
+  pip:
+    name: PyMySQL
+    executable: pip3.9
 - name: Import the dump file into the MySQL database
   community.mysql.mysql_db:
     name: all
@@ -28,6 +27,7 @@
     target: "{{ item }}"
     login_user: "root"
     login_password: "RoboShop@1"
+    login_host: "{{ MYSQL_HOST }}"
   loop:
     - /app/db/schema.sql
     - /app/db/app-user.sql
