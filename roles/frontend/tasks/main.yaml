@@ -15,10 +15,14 @@
   ansible.builtin.file:
     path: /usr/share/nginx/html/
     state: absent
-- name: remove folder of html
+- name: remove zip folder 
   ansible.builtin.file:
     path: /tmp/frontend.zip
     state: absent
+- name: create folder of html
+  ansible.builtin.file:
+    path: /usr/share/nginx/html/
+    state: present
 - name: download the code
   ansible.builtin.get_url:
     url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
