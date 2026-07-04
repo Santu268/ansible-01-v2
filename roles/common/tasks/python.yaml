@@ -1,6 +1,6 @@
 - name: install multiple python packages
   ansible.builtin.dnf:
-    name: {{ item }}
+    name: "{{ item }}"
     state: present
   loop:
     - python

@@ -1,16 +1,16 @@
 - name: app setup
   import_role:
     name: common
-    taks_from: app_setup
+    tasks_from: app_setup
 - name: nodejs app_setup
   import_role:
     name: common
-    taks_from: nodejs
+    tasks_from: nodejs
 - name: service and daemon 
   import_role:
     name: common
-    taks_from: systemd_service
+    tasks_from: systemd_service
 - name: service re start
   import_role:
     name: common
-    taks_from: restart
+    tasks_from: restart

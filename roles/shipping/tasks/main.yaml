@@ -1,16 +1,16 @@
 - name: app setup
   import_role:
     name: common
-    taks_from: app_setup
+    tasks_from: app_setup
 
 - name: install java
   import_role:
     name: common
-    taks_from: java
+    tasks_from: java
 - name: service file copy and daemon reload
   import_role:
     name: comman
-    taks_from: systemd_service
+    tasks_from: systemd_service
 
 - name: install mysql client library
   ansible.builtin.package:
